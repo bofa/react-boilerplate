@@ -44,28 +44,26 @@ export default class Api extends Component {
         let years = [...rangeGen(1960, 2060)];
                 
         for(let c of countries) {
-            console.log("countrie", c);
-        }
-        
-        for(let year of years) {
-            console.log("Year", year);
             
-            fetch('//api.census.gov/data/timeseries/idb/5year?get=NAME,POP&FIPS=NO&time=' + year)
-            .then(function(response) {
-                if (response.status >= 400) {
-                    throw new Error("Bad response from server");
-                }
-                return response.json();
-            })
-            .then(function(data) {
-                data = this.reMap(data);
-                
-                let state = {...this.state};
-                
-                this.setState({"NO": 
-                    {...this.state, this.state.countries year: data }
+            for(let year of years) {
+                fetch('//api.census.gov/data/timeseries/idb/5year?get=NAME,POP&FIPS=+' +c+ '&time=' + year)
+                .then(function(response) {
+                    if (response.status >= 400) {
+                        throw new Error("Bad response from server");
+                    }
+                    return response.json();
                 })
-            }.bind(this));
+                .then(function(data) {
+                    data = this.reMap(data);
+                    
+                    const newData = {};
+                    newData[data.FIPS] = data;
+                    this.setState(newData);
+                    
+                    console.log("State", this.state);
+                    
+                }.bind(this));
+            }
         }
         
         

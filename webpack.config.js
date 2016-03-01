@@ -1,11 +1,13 @@
 var path = require('path');
 var webpack = require('webpack');
+require('babel-polyfill');
 
 module.exports = {
   devtool: 'eval',
   entry: [
     'webpack-dev-server/client?http://localhost:3000',
     'webpack/hot/only-dev-server',
+    'babel-polyfill',
     './src/index'
   ],
   output: {
@@ -18,7 +20,7 @@ module.exports = {
   ],
   module: {
     loaders: [{
-      test: /\.js$/,
+      test: /\.jsx?$/,
       loaders: ['react-hot', 'babel'],
       include: path.join(__dirname, 'src')
     }]

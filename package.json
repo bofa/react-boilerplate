@@ -1,7 +1,7 @@
 {
-  "name": "react-hot-boilerplate",
+  "name": "demography-portal",
   "version": "1.0.0",
-  "description": "Boilerplate for ReactJS project with hot code reloading",
+  "description": "",
   "scripts": {
     "start": "node server.js",
     "lint": "eslint src"

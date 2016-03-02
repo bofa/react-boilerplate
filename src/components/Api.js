@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
+import addons from 'react-addons';
 
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
 import axios from 'axios';
 
-import {Map} from 'immutable';
+import Immutable, { Map } from 'immutable';
 
 function* rangeGen(from, to, step = 1) {
   for (let i = from; i <= to; i += step) {
@@ -16,80 +17,88 @@ export default class Api extends Component {
     
     constructor() {
         super();
-        this.state = {countries: {}};
+        this.state = 
+            {
+                NO: Map()
+            }
+        ;
     }
     
     render() {
-        
-        let countries = this.state.countries;
-        
-        let c; 
-        for (var key in this.state.countries) {
-            c = countries[key];
-            console.log("c", c);
-        }
-        
         return (
             <div>
                 <h1>Hello, world.</h1>
-                {}
+                {
+                    this.state.NO.map( (s,e) => (
+                        <div><h3>{e}</h3>:{s}</div>
+                    ))
+                }
             </div>
         );
     }
     
+    generateAgeArray() {
+        
+        let out = [];
+        for(let i=0; i<=95; i+=5) {
+            out.push("FPOP" + i + "_" + (i+4));
+            out.push("MPOP" + i + "_" + (i+4));
+        }
+        return out;
+    }
     
     componentDidMount() {
         
         // Make a request for a user with a given ID
         
-        let data = "http://api.census.gov/data/timeseries/idb/5year?key=09befa8408a54a731b74a37f7b816fee2346d506&get=NAME,POP,CBR,CDR,E0,FPOP0_4&FIPS=NO&time=2012";
+        const ageArray = this.generateAgeArray();
+        const ageString = ageArray.reduce( (a,b) => a + "," + b);
         
-        axios.get(data)
-        .then(function (response) {
-            console.log(response.data);
-        })
-        .catch(function (response) {
-            console.log(response);
-        });
+        console.log("ageString", ageString);
         
-        /*
         let { countries } = this.props;
-        let years = [...rangeGen(1960, 2060), 5];
+        //let years = [...rangeGen(1960, 2060), 5];
+        let years = [...rangeGen(2011, 2011+10, 5)];
         
         for(let c of countries) {
             
-            for(let year of years) {}}}}
+            for(let year of years) {
+                console.log("c:", c, "year:", year);
+        
+                let url = "http://api.census.gov/data/timeseries/idb/5year?key=09befa8408a54a731b74a37f7b816fee2346d506&get=NAME,POP,CBR,CDR,E0," + ageString + "&FIPS=NO&time=" + year;
                 
+                axios.get(url)
+                .then(function (response) {
+
+                    console.log(response.data);
+                    const data = this.reMap(response.data);
+
+                    const c = data.FIPS;
+                    const t = data.time;
+                    
+                    console.log("state1", this.state, "data", data);
+                    
+                    const newState = {...this.state}
+                    newState[c] = this.state[c].setIn([t], Map(data));
+                    this.setState(newState);
+                    
+                    console.log("State2", newState);
+                }.bind(this))
+                .catch(function (response) {
+                    console.log(response);
+                });
                 
-                fetch('//api.census.gov/data/timeseries/idb/5year?get=NAME,POP&FIPS=+' + c)
-                .then(function(response) {
-                    if (response.status >= 400) {
-                        throw new Error("Bad response from server");
-                    }
-                    return response.json();
-                })
-                .then(function(data) {
-                    data = this.reMap(data);
-                    
-                    const newData = {};
-                    newData[data.FIPS] = data;
-                    this.setState(newData);
-                    
-                    console.log("State", this.state);
-                    
-                }.bind(this));
-                
-            
             }
         }
-        */
+        
         
     }
     
     reMap(data) {
         let out = {};
         for(let i=0; i<data[0].length; ++i) {
-            out[data[0][i]] = data[1][i]
+            if(data[0][i] && data[1][i])
+               out[data[0][i]] = data[1][i];
         }
         return out;
     }

@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-import addons from 'react-addons';
 
 require('es6-promise').polyfill();
-require('isomorphic-fetch');
 import axios from 'axios';
 
 import Immutable, { Map } from 'immutable';

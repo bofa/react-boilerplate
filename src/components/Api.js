@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
+import axios from 'axios';
 
 import {Map} from 'immutable';
 
@@ -20,8 +21,6 @@ export default class Api extends Component {
     
     render() {
         
-        let data = "http://api.census.gov/data/timeseries/idb/5year?get=NAME,POP,CBR,CDR,E0,AREA_KM2&FIPS=NO&time=2012";
-        
         let countries = this.state.countries;
         
         let c; 
@@ -38,15 +37,31 @@ export default class Api extends Component {
         );
     }
     
+    
     componentDidMount() {
         
+        // Make a request for a user with a given ID
+        
+        let data = "http://api.census.gov/data/timeseries/idb/5year?key=09befa8408a54a731b74a37f7b816fee2346d506&get=NAME,POP,CBR,CDR,E0,FPOP0_4&FIPS=NO&time=2012";
+        
+        axios.get(data)
+        .then(function (response) {
+            console.log(response.data);
+        })
+        .catch(function (response) {
+            console.log(response);
+        });
+        
+        /*
         let { countries } = this.props;
-        let years = [...rangeGen(1960, 2060)];
-                
+        let years = [...rangeGen(1960, 2060), 5];
+        
         for(let c of countries) {
             
-            for(let year of years) {
-                fetch('//api.census.gov/data/timeseries/idb/5year?get=NAME,POP&FIPS=+' +c+ '&time=' + year)
+            for(let year of years) {}}}}
+                
+                
+                fetch('//api.census.gov/data/timeseries/idb/5year?get=NAME,POP&FIPS=+' + c)
                 .then(function(response) {
                     if (response.status >= 400) {
                         throw new Error("Bad response from server");
@@ -63,9 +78,11 @@ export default class Api extends Component {
                     console.log("State", this.state);
                     
                 }.bind(this));
+                
+            
             }
         }
-        
+        */
         
     }
     

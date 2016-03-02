@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 
-import Api from './components/api';
 import Chart from './components/Chart';
 
 require('es6-promise').polyfill();
@@ -17,10 +16,7 @@ export default class App extends Component {
         
         return (
             <div>
-                <Chart />
-                <Api countries={this.state.countries} />
-                <h1>Hello, world.</h1>
-                {JSON.stringify(this.state)}
+                <Chart countries={this.state.countries} />
             </div>
         );
     }

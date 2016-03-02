@@ -21,19 +21,21 @@ export default class Chart extends Component {
         super();
         this.state = 
             {
-                NO: Map()
+                NO: Map({name: 'Norway'})
             }
         ;
     }
     
     render() {
         
+        const year = 2011;
+        
         const ageArray = this.generateAgeArray();
         const menArray = ageArray.filter(e => e.charAt(0)==='M');
         const womanArray = ageArray.filter(e => e.charAt(0)==='F');
         
-        const menData = menArray.map(e => -parseInt(this.state.NO.getIn(['2011', e])));
-        const womanData = womanArray.map(e => parseInt(this.state.NO.getIn(['2011', e])));
+        const menData = menArray.map(e => -parseInt(this.state.NO.getIn([''+year, e])));
+        const womanData = womanArray.map(e => parseInt(this.state.NO.getIn([''+year, e])));
         
         console.log("menData", menData);
         
@@ -49,7 +51,7 @@ export default class Chart extends Component {
                 type: 'bar'
             },
             title: {
-                text: 'Population pyramid for Germany, 2015'
+                text: 'Population pyramid for ' + this.state.NO.get('name') + ', ' + year
             },
             subtitle: {
                 text: 'Source: <a href="http://populationpyramid.net/germany/2015/">Population Pyramids of the World from 1950 to 2100</a>'

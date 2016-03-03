@@ -7,32 +7,26 @@ global.Highcharts = require('highcharts');
 //HighchartsMore(global.Highcharts);
 var ReactHighcharts = require('react-highcharts');
 
-import API from '../services/api';
-
-function* rangeGen(from, to, step = 1) {
-  for (let i = from; i <= to; i += step) {
-    yield i;
-  }
-}
-
 export default class Chart extends Component {
     
     constructor() {
         super();
-        this.state = 
-            {
-                NO: Map({name: 'Norway'}),
-                contry: 'SA',
-                name: 'Saudi Arabia'
+        this.state = {
         
-            }
-        ;
+        };
+    }
+    
+    componentWillReceiveProps() {
+        // this.componentDidMount();
     }
     
     render() {
-
-        console.log("Render state", this.state);
-        console.log("Render state, NO", this.state.NO.toJS());
+        
+        const { country } = this.props;
+        
+        const data = country.toJS();
+        
+        console.log("SDF", data);
         
         const year = 2011;
         
@@ -40,14 +34,14 @@ export default class Chart extends Component {
         const menArray = ageArray.filter(e => e.charAt(0)==='M');
         const womanArray = ageArray.filter(e => e.charAt(0)==='F');
         
-        const demogrpyData = this.state[this.state.contry];
+        //const demogrpyData = country.get() data[this.state.contry];
         
-        if(!demogrpyData) {
+        if(!country) {
             return false;
         }
         
-        const menData = menArray.map(e => -parseInt(demogrpyData.getIn([''+year, e])));
-        const womanData = womanArray.map(e => parseInt(demogrpyData.getIn([''+year, e])));
+        const menData = menArray.map(e => -parseInt(country.getIn([''+year, e])));
+        const womanData = womanArray.map(e => parseInt(country.getIn([''+year, e])));
         
         console.log("menData", menData);
         
@@ -141,22 +135,6 @@ export default class Chart extends Component {
                out[data[0][i]] = data[1][i];
         }
         return out;
-    }
-
-    componentDidMount() {
-        
-        let { country } = this.props;
-        let years = [...rangeGen(2011, 2011+10, 5)];
-        
-        const p = API.getCountry(country, years);
-        p.then( v => {
-            console.log("Got v", v);
-            v.name = name;
-            const newState = {};
-            newState[this.state.contry] = Immutable.fromJS(v);
-            this.setState(newState);
-            //console.log("New state", newState);
-        })
     }
     
 }

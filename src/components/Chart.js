@@ -7,7 +7,7 @@ global.Highcharts = require('highcharts');
 //HighchartsMore(global.Highcharts);
 var ReactHighcharts = require('react-highcharts');
 
-
+import API from '../services/api';
 
 function* rangeGen(from, to, step = 1) {
   for (let i = from; i <= to; i += step) {
@@ -21,12 +21,18 @@ export default class Chart extends Component {
         super();
         this.state = 
             {
-                NO: Map({name: 'Norway'})
+                NO: Map({name: 'Norway'}),
+                contry: 'SA',
+                name: 'Saudi Arabia'
+        
             }
         ;
     }
     
     render() {
+
+        console.log("Render state", this.state);
+        console.log("Render state, NO", this.state.NO.toJS());
         
         const year = 2011;
         
@@ -34,8 +40,14 @@ export default class Chart extends Component {
         const menArray = ageArray.filter(e => e.charAt(0)==='M');
         const womanArray = ageArray.filter(e => e.charAt(0)==='F');
         
-        const menData = menArray.map(e => -parseInt(this.state.NO.getIn([''+year, e])));
-        const womanData = womanArray.map(e => parseInt(this.state.NO.getIn([''+year, e])));
+        const demogrpyData = this.state[this.state.contry];
+        
+        if(!demogrpyData) {
+            return false;
+        }
+        
+        const menData = menArray.map(e => -parseInt(demogrpyData.getIn([''+year, e])));
+        const womanData = womanArray.map(e => parseInt(demogrpyData.getIn([''+year, e])));
         
         console.log("menData", menData);
         
@@ -51,7 +63,7 @@ export default class Chart extends Component {
                 type: 'bar'
             },
             title: {
-                text: 'Population pyramid for ' + this.state.NO.get('name') + ', ' + year
+                text: 'Population pyramid for ' + this.state.name + ', ' + year
             },
             subtitle: {
                 text: 'Source: <a href="http://populationpyramid.net/germany/2015/">Population Pyramids of the World from 1950 to 2100</a>'
@@ -130,52 +142,21 @@ export default class Chart extends Component {
         }
         return out;
     }
-    
+
     componentDidMount() {
-       
-        
-        // Make a request for a user with a given ID
-        
-        const ageArray = this.generateAgeArray();
-        const ageString = ageArray.reduce( (a,b) => a + "," + b);
-        
-        console.log("ageString", ageString);
         
         let { countries } = this.props;
-        //let years = [...rangeGen(1960, 2060), 5];
         let years = [...rangeGen(2011, 2011+10, 5)];
         
-        for(let c of countries) {
-            
-            for(let year of years) {
-                console.log("c:", c, "year:", year);
-        
-                let url = "http://api.census.gov/data/timeseries/idb/5year?key=09befa8408a54a731b74a37f7b816fee2346d506&get=NAME,POP,CBR,CDR,E0," + ageString + "&FIPS=NO&time=" + year;
-                
-                axios.get(url)
-                .then(function (response) {
-
-                    console.log(response.data);
-                    const data = this.reMap(response.data);
-
-                    const c = data.FIPS;
-                    const t = data.time;
-                    
-                    console.log("state1", this.state, "data", data);
-                    
-                    const newState = {};
-                    newState[c] = this.state[c].setIn([t], Map(data));
-                    this.setState(newState);
-                    
-                    console.log("State2", newState.NO.toJS());
-                }.bind(this))
-                .catch(function (response) {
-                    console.log(response);
-                });
-                
-            }
-        }
-        
-        
+        const p = API.getCountry(this.state.contry, years);
+        p.then( v => {
+            console.log("Got v", v);
+            v.name = name;
+            const newState = {};
+            newState[this.state.contry] = Immutable.fromJS(v);
+            this.setState(newState);
+            //console.log("New state", newState);
+        })
     }
+    
 }

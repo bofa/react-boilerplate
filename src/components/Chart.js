@@ -145,10 +145,10 @@ export default class Chart extends Component {
 
     componentDidMount() {
         
-        let { countries } = this.props;
+        let { country } = this.props;
         let years = [...rangeGen(2011, 2011+10, 5)];
         
-        const p = API.getCountry(this.state.contry, years);
+        const p = API.getCountry(country, years);
         p.then( v => {
             console.log("Got v", v);
             v.name = name;

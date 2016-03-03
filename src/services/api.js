@@ -38,7 +38,7 @@ export default class API {
             return Promise.resolve(JSON.parse(localStorage));
         }
        
-        console.log("Running API");
+        console.log("Running API", country, years);
         // Make a request for a user with a given ID
         
         const ageArray = API.generateAgeArray();
@@ -67,7 +67,7 @@ export default class API {
         console.log("Promises", promises);
         
         let pOut = Promise.all(promises).then(values => { 
-            console.log(values); // [3, 1337, "foo"] 
+            console.log(values);
             return values.reduce( (a,b) => Object.assign(a,b) );
         }, f => console.log("API fail", f) );
         

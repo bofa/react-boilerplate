@@ -9,6 +9,7 @@ import Chart from './Chart';
 import Slider from './Slider';
 
 import API from '../services/api';
+import ReactInterval from 'react-interval';
 
 function* rangeGen(from, to, step = 1) {
   for (let i = from; i <= to; i += step) {
@@ -17,8 +18,8 @@ function* rangeGen(from, to, step = 1) {
 }
 
 const settings = {
-    minYear: 2000,
-    maxYear: 2015,
+    minYear: 1991,
+    maxYear: 2050,
 }
 
 export default class Main extends Component {
@@ -101,6 +102,35 @@ export default class Main extends Component {
                 FIPS: 'NO',
                 name: 'Norway'
             },
+            {
+                FIPS: 'FI',
+                name: 'Finland'
+            },
+            {
+                FIPS: 'SU',
+                name: 'Sudan'
+            },
+            {
+                FIPS: 'TH',
+                name: 'Thailand'
+            },
+            {
+                FIPS: 'TW',
+                name: 'Taiwan'
+            },
+            {
+                FIPS: 'UK',
+                name: 'United Kingdom'
+            },
+            {
+                FIPS: 'VN',
+                name: 'Vietnam'
+            },
+            {
+                FIPS: 'AS',
+                name: 'Australia'
+            },
+            
         ].sort(compare);
         
         this.FIPSData = this.FIPS.map( (c,i) => <MenuItem value={c.FIPS} key={i} primaryText={c.name} /> );
@@ -134,7 +164,9 @@ export default class Main extends Component {
     render() {
 
         console.log("State", this.state);
-
+        
+        const max = Math.max(this.state.fipsData1.get('maxYear'), this.state.fipsData2.get('maxYear'));
+        
         return (
             <div>
                 <div>
@@ -146,14 +178,14 @@ export default class Main extends Component {
                         <SelectField value={this.state.fips1} onChange={ this.fips1 }>
                             {this.FIPSData}
                         </SelectField>
-                        <Chart year={this.state.year} country={this.state.fipsData1} />
+                        <Chart year={this.state.year} country={this.state.fipsData1} scale={0.1*this.state.fipsData1.get('maxYear')} />
                     </div>
                     
                     <div className="col-xs-6">
                         <SelectField value={this.state.fips2} onChange={ this.fips2 }>
                             {this.FIPSData}
                         </SelectField>
-                        <Chart year={this.state.year}  country={this.state.fipsData2} />
+                        <Chart year={this.state.year}  country={this.state.fipsData2} scale={0.1*this.state.fipsData2.get('maxYear')}/>
                     </div>
                 </div>
 
@@ -164,6 +196,11 @@ export default class Main extends Component {
     componentDidMount() {
         this.getAPI('fipsData1', this.state.fips1);
         this.getAPI('fipsData2', this.state.fips2);
+        
+        setInterval( (state => {
+            const newYear = this.state.year>=settings.maxYear ? settings.minYear : this.state.year+1;
+            this.setState({year: newYear});
+        }).bind(this), 700);
     }
     
     getAPI(fipsKey, country) {
@@ -173,13 +210,30 @@ export default class Main extends Component {
         //let { country } = this.props;
         let years = [...rangeGen(settings.minYear, settings.maxYear, 1)];
         
+        // TODO max for max POP
         const p = API.getCountry(country, years);
         p.then( v => {
             v.name = name;
+            console.log("v", v);
+            
+            v.maxYear = Object.keys(v).reduce(function (previous, key) {
+                console.log("v[key].POP", v[key].POP, key);
+                const value = parseInt(v[key].POP);
+                if( value && !isNaN(value) ) {
+                    return Math.max(previous, value );
+                } else {
+                    return previous;
+                }
+            }, 0);
+            
             const newState = {};
             newState[fipsKey] = Immutable.fromJS(v);
             this.setState(newState);
         })
+        
+        
+        
+        return p;
         
     }
     

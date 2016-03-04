@@ -22,11 +22,9 @@ export default class Chart extends Component {
     
     render() {
         
-        const { country, year } = this.props;
+        const { country, year, scale } = this.props;
         
         const data = country.toJS();
-        
-        console.log("SDF", data);
         
         // const year = 2011;
         
@@ -43,8 +41,6 @@ export default class Chart extends Component {
         const menData = menArray.map(e => -parseInt(country.getIn([''+year, e])));
         const womanData = womanArray.map(e => parseInt(country.getIn([''+year, e])));
         
-        console.log("menData", menData);
-        
         // Age categories
         const categories = ['0-4', '5-9', '10-14', '15-19',
                             '20-24', '25-29', '30-34', '35-39', '40-44',
@@ -60,7 +56,7 @@ export default class Chart extends Component {
                 text: 'Population pyramid for ' + this.state.name + ', ' + year
             },
             subtitle: {
-                text: 'Source: <a href="http://populationpyramid.net/germany/2015/">Population Pyramids of the World from 1950 to 2100</a>'
+                text: 'Source: <a href="http://www.census.gov/">US Census</a>'
             },
             xAxis: [{
                 categories: categories,
@@ -85,7 +81,9 @@ export default class Chart extends Component {
                     formatter: function () {
                         return Math.abs(this.value);
                     }
-                }
+                },
+                max: scale,
+                min: -scale
             },
 
             plotOptions: {
@@ -96,7 +94,7 @@ export default class Chart extends Component {
 
             tooltip: {
                 formatter: function () {
-                    return '<b>' + this.series.name + ', age ' + this.point.category + '</b><br/>' +
+                    return '<b>' + country.get('name') + ', age ' + this.point.category + '</b><br/>' +
                         'Population: ' + Highcharts.numberFormat(Math.abs(this.point.y), 0);
                 }
             },

@@ -2,6 +2,11 @@ import React, { Component } from 'react';
 import MaterialSlider from 'material-ui/lib/slider';
 import TextField from 'material-ui/lib/text-field';
 
+import FloatingActionButton from 'material-ui/lib/floating-action-button';
+import ContentAdd from 'material-ui/lib/svg-icons/content/add';
+
+import IconButton from 'material-ui/lib/icon-button';
+
 export default class Slider extends Component {
     
     constructor() {
@@ -33,10 +38,13 @@ export default class Slider extends Component {
         const step = 1/(max - min);
         const value = (year - min)/(max - min);
         
-        console.log("minmax", year, step, value);
-        
         return (
             <div>
+                
+                <IconButton iconClassName="muidocs-icon-custom-github" >
+                    a
+                </IconButton>
+                
                 <TextField
                     value={year}
                     hintText="Hint Text"

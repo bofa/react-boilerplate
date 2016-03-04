@@ -31,38 +31,42 @@ export default class API {
     static getCountry(country, years) {
         
         // LS.clear();
+        const apiKey = '09befa8408a54a731b74a37f7b816fee2346d506';
+        const ageArray = API.generateAgeArray();
+        const ageString = ageArray.reduce( (a,b) => a + "," + b);
         
-        const localStorage = LS.get(country);
-        if(localStorage && localStorage.length > 0) {
-            console.log("Fetching local storage.", country, localStorage);
-            return Promise.resolve(JSON.parse(localStorage));
-        }
+        
+        let localStorage = LS.get(country);
+        localStorage = localStorage ? JSON.parse(localStorage) : {};
+        
        
         console.log("Running API", country, years);
         // Make a request for a user with a given ID
         
-        const ageArray = API.generateAgeArray();
-        const ageString = ageArray.reduce( (a,b) => a + "," + b);
-        
-        const apiKey = 'd3c3287ae1d0908d35faca6a0a67f7f741a3fb49';
         
         let promises = [];
         for(let year of years) {
-            console.log("c:", country, "year:", year);
-    
-            let url = "http://api.census.gov/data/timeseries/idb/5year?key=+' + apiKey + '&get=NAME,POP,CBR,CDR,E0," + 
-                        ageString + "&FIPS=" + country + "&time=" + year;
             
-            promises.push(axios.get(url)
-            .then(function (response) {
-                let out = {};
-                out[year] = API.reMap(response.data)
-                return out;
-            })
-            .catch(function (response) {
-                console.log(response);
-                return undefined;
-            }));
+            let url = "http://api.census.gov/data/timeseries/idb/5year?key=" + apiKey + "&get=NAME,POP,CBR,CDR,E0," + 
+                        ageString + "&FIPS=" + country + "&time=" + year;
+
+            if( year in localStorage  ) {
+                console.log("Running Local", "c:", country, "year:", year, "l", localStorage[year]);
+                promises.push(Promise.resolve( {[year]: localStorage[year] } ));
+            }
+            else {
+                console.log("Running API", "c:", country, "year:", year);
+                promises.push(axios.get(url)
+                .then(function (response) {
+                    let out = {};
+                    out[year] = API.reMap(response.data)
+                    return out;
+                })
+                .catch(function (response) {
+                    console.log(response);
+                    return undefined;
+                }));
+            }
             
         }
         

@@ -113,7 +113,7 @@ export default class Chart extends Component {
         
         return (
             <div>
-                <ReactHighcharts config={config}></ReactHighcharts>
+                <ReactHighcharts isPureConfig={true} config={config}></ReactHighcharts>
             </div>
         );
     }

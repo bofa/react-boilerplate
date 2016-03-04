@@ -5,11 +5,13 @@ import SelectField from 'material-ui/lib/select-field';
 import MenuItem from 'material-ui/lib/menus/menu-item';
 import DropDownMenu from 'material-ui/lib/DropDownMenu';
 
+const {Grid, Row, Col} = require('react-flexbox-grid');
+
 import Chart from './Chart';
 import Slider from './Slider';
 
 import API from '../services/api';
-import ReactInterval from 'react-interval';
+import FIPS from '../services/data';
 
 function* rangeGen(from, to, step = 1) {
   for (let i = from; i <= to; i += step) {
@@ -18,8 +20,8 @@ function* rangeGen(from, to, step = 1) {
 }
 
 const settings = {
-    minYear: 1991,
-    maxYear: 2050,
+    minYear: 1980,
+    maxYear: 2040,
 }
 
 export default class Main extends Component {
@@ -34,108 +36,8 @@ export default class Main extends Component {
         this.onAnimate = this.onAnimate.bind(this);
         
         
-        function compare(a,b) {
-            if (a.name < b.name)
-                return -1;
-            else if (a.name > b.name)
-                return 1;
-            else 
-                return 0;
-        }
-        
-        this.FIPS = [
-            {
-                FIPS: 'AA',
-                name: 'Aruba'
-            },
-            {
-                FIPS: 'AC',
-                name: 'Antigua and Barbuda'
-            },
-            {
-                FIPS: 'MX',
-                name: 'Mexico'
-            },
-            {
-                FIPS: 'BX',
-                name: 'Brunei'
-            },
-            {
-                FIPS: 'QA',
-                name: 'Qatar'
-            },
-            {
-                FIPS: 'SY',
-                name: 'Syria'
-            },
-            {
-                FIPS: 'PO',
-                name: 'Portugal'
-            },
-            {
-                FIPS: 'KN',
-                name: 'Korea, North'
-            },
-            {
-                FIPS: 'WS',
-                name: 'Samoa'
-            },
-            {
-                FIPS: 'SW',
-                name: 'Sweden'
-            },
-            {
-                FIPS: 'SZ',
-                name: 'Switzerland'
-            },
-            {
-                FIPS: 'UP',
-                name: 'Ukraine'
-            },
-            {
-                FIPS: 'KR',
-                name: 'Kiribati'
-            },
-            {
-                FIPS: 'NG',
-                name: 'Niger'
-            },
-            {
-                FIPS: 'NO',
-                name: 'Norway'
-            },
-            {
-                FIPS: 'FI',
-                name: 'Finland'
-            },
-            {
-                FIPS: 'SU',
-                name: 'Sudan'
-            },
-            {
-                FIPS: 'TH',
-                name: 'Thailand'
-            },
-            {
-                FIPS: 'TW',
-                name: 'Taiwan'
-            },
-            {
-                FIPS: 'UK',
-                name: 'United Kingdom'
-            },
-            {
-                FIPS: 'VN',
-                name: 'Vietnam'
-            },
-            {
-                FIPS: 'AS',
-                name: 'Australia'
-            },
-            
-        ].sort(compare);
-        
-        this.FIPSData = this.FIPS.map( (c,i) => <MenuItem value={c.FIPS} key={i} primaryText={c.name} /> );
+        this.FIPSData = FIPS
+        .map( (c,i) => <MenuItem value={c.FIPS} key={i} primaryText={c.name} /> );
         
         this.state = {
             year: 2000,
@@ -151,12 +53,12 @@ export default class Main extends Component {
     
     fips1(event, index, value) {
         this.setState({ fips1: value});
-        this.getAPI('fipsData1', this.FIPS[index].FIPS);
+        this.getAPI('fipsData1', FIPS[index].FIPS);
     }
     
     fips2(event, index, value) {
         this.setState({ fips2: value});
-        this.getAPI('fipsData2', this.FIPS[index].FIPS);
+        this.getAPI('fipsData2', FIPS[index].FIPS);
     }
     
     onSliderChange(value) {
@@ -171,19 +73,20 @@ export default class Main extends Component {
         
         return (
             <div>
+            
                 <div>
                     <Slider year={this.state.year} min={settings.minYear} max={settings.maxYear} onChange={this.onSliderChange} onAnimate={ this.onAnimate } />
                 </div>
                 
                 <div className="row">
-                    <div className="col-xs-6">
+                    <div className="col-lg-6">
                         <SelectField value={this.state.fips1} onChange={ this.fips1 }>
                             {this.FIPSData}
                         </SelectField>
                         <Chart year={this.state.year} country={this.state.fipsData1} scale={0.1*this.state.fipsData1.get('maxYear')} />
                     </div>
                     
-                    <div className="col-xs-6">
+                    <div className="col-lg-6">
                         <SelectField value={this.state.fips2} onChange={ this.fips2 } >
                             {this.FIPSData}
                         </SelectField>
@@ -202,7 +105,7 @@ export default class Main extends Component {
             this.interval = setInterval( (state => {
                 const newYear = this.state.year>=settings.maxYear ? settings.minYear : this.state.year+1;
                 this.setState({year: newYear});
-            }).bind(this), 700);
+            }).bind(this), 500);
         }
         else {
             clearInterval(this.interval);
@@ -225,6 +128,7 @@ export default class Main extends Component {
         let years = [...rangeGen(settings.minYear, settings.maxYear, 1)];
         
         // TODO max for max POP
+        this.setState({[fipsKey]: Map()});
         const p = API.getCountry(country, years);
         p.then( v => {
             v.name = name;

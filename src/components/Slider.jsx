@@ -12,7 +12,6 @@ export default class Slider extends Component {
     constructor() {
         super();
         this.state = {
-            year: 1960
         };
         
         this.onSliderChange = this.onSliderChange.bind(this);

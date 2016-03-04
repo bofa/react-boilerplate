@@ -24,10 +24,16 @@ module.exports = {
             loaders: ['react-hot', 'babel-loader'],
             include: path.join(__dirname, 'src')
         },
+        {
+            test: /\.scss$/,
+            loaders: ['style', 'css?modules', 'sass'],
+            include: path.resolve(__dirname, 'react-flexbox-grid'),
+        },
         { 
             test: /\.css$/, 
             loader: 'css-loader',
         },
+
     ]
   },
   resolve: {
@@ -37,6 +43,6 @@ module.exports = {
         root: [
             './src',
         ],
-        extensions: ['', '.js', '.jsx', '.css']
+        extensions: ['', '.js', '.jsx']
     },
 };

@@ -44,11 +44,13 @@ export default class API {
         const ageArray = API.generateAgeArray();
         const ageString = ageArray.reduce( (a,b) => a + "," + b);
         
+        const apiKey = 'd3c3287ae1d0908d35faca6a0a67f7f741a3fb49';
+        
         let promises = [];
         for(let year of years) {
             console.log("c:", country, "year:", year);
     
-            let url = "http://api.census.gov/data/timeseries/idb/5year?key=09befa8408a54a731b74a37f7b816fee2346d506&get=NAME,POP,CBR,CDR,E0," + 
+            let url = "http://api.census.gov/data/timeseries/idb/5year?key=+' + apiKey + '&get=NAME,POP,CBR,CDR,E0," + 
                         ageString + "&FIPS=" + country + "&time=" + year;
             
             promises.push(axios.get(url)

@@ -22,23 +22,23 @@ export default class Slider extends Component {
         const { min, max, onChange } = this.props;
         let year = min + (max-min)*value;
         
-        console.log("On change", year);
+        console.log("On change", min, max, value, year);
         
-        this.setState({year});
-        onChange(value);
+        onChange(Math.round(year));
     }
     
     render() {
         
-        const { min, max } = this.props;
+        const { min, max, year } = this.props;
         const step = 1/(max - min);
-        const value = (this.state.year - min)/(max - min);
+        const value = (year - min)/(max - min);
         
+        console.log("minmax", year, step, value);
         
         return (
             <div>
                 <TextField
-                    value={this.state.year}
+                    value={year}
                     hintText="Hint Text"
                 />
                 <MaterialSlider step={step} value={value} onChange={this.onSliderChange}	/>

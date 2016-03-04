@@ -16,6 +16,11 @@ function* rangeGen(from, to, step = 1) {
   }
 }
 
+const settings = {
+    minYear: 2000,
+    maxYear: 2015,
+}
+
 export default class Main extends Component {
     
     constructor(props) {
@@ -101,9 +106,9 @@ export default class Main extends Component {
         this.FIPSData = this.FIPS.map( (c,i) => <MenuItem value={c.FIPS} key={i} primaryText={c.name} /> );
         
         this.state = {
+            year: 2000,
             fips1: 'KR',
             fips2: 'WS',
-            value: 2,
             fipsData1: Map(),
             fipsData2: Map()
         };
@@ -132,26 +137,26 @@ export default class Main extends Component {
 
         return (
             <div>
+                <div>
+                    <Slider year={this.state.year} min={settings.minYear} max={settings.maxYear} onChange={this.onSliderChange} />
+                </div>
+                
                 <div className="row">
                     <div className="col-xs-6">
                         <SelectField value={this.state.fips1} onChange={ this.fips1 }>
                             {this.FIPSData}
                         </SelectField>
-                        <Chart country={this.state.fipsData1} />
+                        <Chart year={this.state.year} country={this.state.fipsData1} />
                     </div>
                     
                     <div className="col-xs-6">
                         <SelectField value={this.state.fips2} onChange={ this.fips2 }>
                             {this.FIPSData}
                         </SelectField>
-                        <Chart country={this.state.fipsData2} />
+                        <Chart year={this.state.year}  country={this.state.fipsData2} />
                     </div>
                 </div>
-                    
-                <div>
-                    <Slider min={1960} max={2060} onChange={this.onSliderChange} />
-                    
-                </div>
+
             </div>
         );
     }
@@ -166,7 +171,7 @@ export default class Main extends Component {
         console.log("Yooo", fipsKey, country);
         
         //let { country } = this.props;
-        let years = [...rangeGen(2011, 2011+10, 5)];
+        let years = [...rangeGen(settings.minYear, settings.maxYear, 1)];
         
         const p = API.getCountry(country, years);
         p.then( v => {

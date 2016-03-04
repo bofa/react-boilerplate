@@ -22,13 +22,13 @@ export default class Chart extends Component {
     
     render() {
         
-        const { country } = this.props;
+        const { country, year } = this.props;
         
         const data = country.toJS();
         
         console.log("SDF", data);
         
-        const year = 2011;
+        // const year = 2011;
         
         const ageArray = this.generateAgeArray();
         const menArray = ageArray.filter(e => e.charAt(0)==='M');
@@ -103,10 +103,12 @@ export default class Chart extends Component {
 
             series: [{
                 name: 'Male',
-                data: menData
+                data: menData,
+                animation: false,
             }, {
                 name: 'Female',
-                data: womanData
+                data: womanData,
+                animation: false,
             }]
         }
         

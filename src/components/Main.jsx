@@ -26,7 +26,14 @@ export default class Main extends Component {
         this.getAPI = this.getAPI.bind(this);
         this.onSliderChange = this.onSliderChange.bind(this);
         
-        
+        function compare(a,b) {
+            if (a.name < b.name)
+                return -1;
+            else if (a.name > b.name)
+                return 1;
+            else 
+                return 0;
+        }
         
         this.FIPS = [
             {
@@ -66,10 +73,30 @@ export default class Main extends Component {
                 name: 'Samoa'
             },
             {
+                FIPS: 'SW',
+                name: 'Sweden'
+            },
+            {
+                FIPS: 'SZ',
+                name: 'Switzerland'
+            },
+            {
+                FIPS: 'UP',
+                name: 'Ukraine'
+            },
+            {
                 FIPS: 'KR',
                 name: 'Kiribati'
             },
-        ]
+            {
+                FIPS: 'NG',
+                name: 'Niger'
+            },
+            {
+                FIPS: 'NO',
+                name: 'Norway'
+            },
+        ].sort(compare);
         
         this.FIPSData = this.FIPS.map( (c,i) => <MenuItem value={c.FIPS} key={i} primaryText={c.name} /> );
         

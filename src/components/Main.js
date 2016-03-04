@@ -6,6 +6,7 @@ import MenuItem from 'material-ui/lib/menus/menu-item';
 import DropDownMenu from 'material-ui/lib/DropDownMenu';
 
 import Chart from './Chart';
+import Slider from './Slider';
 
 import API from '../services/api';
 
@@ -23,6 +24,9 @@ export default class Main extends Component {
         this.fips1 = this.fips1.bind(this);
         this.fips2 = this.fips2.bind(this);
         this.getAPI = this.getAPI.bind(this);
+        this.onSliderChange = this.onSliderChange.bind(this);
+        
+        
         
         this.FIPS = [
             {
@@ -91,24 +95,36 @@ export default class Main extends Component {
         this.getAPI('fipsData2', this.FIPS[index].FIPS);
     }
     
+    onSliderChange(value) {
+        this.setState({ year: value});
+    }
+    
     render() {
 
         console.log("State", this.state);
 
         return (
             <div>
-            
-                <SelectField value={this.state.fips1} onChange={ this.fips1 }>
-                    {this.FIPSData}
-                </SelectField>
-                
-                <SelectField value={this.state.fips2} onChange={ this.fips2 }>
-                    {this.FIPSData}
-                </SelectField>
-            
-                <Chart country={this.state.fipsData1} />
-                <Chart country={this.state.fipsData2} />
-
+                <div className="row">
+                    <div className="col-xs-6">
+                        <SelectField value={this.state.fips1} onChange={ this.fips1 }>
+                            {this.FIPSData}
+                        </SelectField>
+                        <Chart country={this.state.fipsData1} />
+                    </div>
+                    
+                    <div className="col-xs-6">
+                        <SelectField value={this.state.fips2} onChange={ this.fips2 }>
+                            {this.FIPSData}
+                        </SelectField>
+                        <Chart country={this.state.fipsData2} />
+                    </div>
+                </div>
+                    
+                <div>
+                    <Slider min={1960} max={2060} onChange={this.onSliderChange} />
+                    
+                </div>
             </div>
         );
     }

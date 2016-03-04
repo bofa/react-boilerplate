@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import Chart from './components/Chart';
 import Main from './components/Main';
 
+require('flexboxgrid/css/flexboxgrid.min.css');
+
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 

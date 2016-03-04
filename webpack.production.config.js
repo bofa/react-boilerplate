@@ -35,6 +35,6 @@ module.exports = {
         root: [
             './src',
         ],
-        extensions: ['', '.js', '.jsx']
+        extensions: ['', '.js', '.jsx', '.css']
     },
 };

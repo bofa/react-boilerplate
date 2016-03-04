@@ -34,14 +34,14 @@ export default class Slider extends Component {
     
     render() {
         
-        const { min, max, year } = this.props;
+        const { min, max, year, onAnimate } = this.props;
         const step = 1/(max - min);
         const value = (year - min)/(max - min);
         
         return (
             <div>
                 
-                <IconButton iconClassName="muidocs-icon-custom-github" >
+                <IconButton onMouseDown={onAnimate} iconClassName="muidocs-icon-custom-github" >
                     a
                 </IconButton>
                 

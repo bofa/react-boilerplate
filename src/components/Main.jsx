@@ -31,6 +31,8 @@ export default class Main extends Component {
         this.fips2 = this.fips2.bind(this);
         this.getAPI = this.getAPI.bind(this);
         this.onSliderChange = this.onSliderChange.bind(this);
+        this.onAnimate = this.onAnimate.bind(this);
+        
         
         function compare(a,b) {
             if (a.name < b.name)
@@ -170,7 +172,7 @@ export default class Main extends Component {
         return (
             <div>
                 <div>
-                    <Slider year={this.state.year} min={settings.minYear} max={settings.maxYear} onChange={this.onSliderChange} />
+                    <Slider year={this.state.year} min={settings.minYear} max={settings.maxYear} onChange={this.onSliderChange} onAnimate={ this.onAnimate } />
                 </div>
                 
                 <div className="row">
@@ -182,7 +184,7 @@ export default class Main extends Component {
                     </div>
                     
                     <div className="col-xs-6">
-                        <SelectField value={this.state.fips2} onChange={ this.fips2 }>
+                        <SelectField value={this.state.fips2} onChange={ this.fips2 } >
                             {this.FIPSData}
                         </SelectField>
                         <Chart year={this.state.year}  country={this.state.fipsData2} scale={0.1*this.state.fipsData2.get('maxYear')}/>
@@ -193,14 +195,26 @@ export default class Main extends Component {
         );
     }
     
+    onAnimate(start) {
+        
+        if(this.interval!==-1) {
+            clearInterval(this.interval);
+            this.interval = setInterval( (state => {
+                const newYear = this.state.year>=settings.maxYear ? settings.minYear : this.state.year+1;
+                this.setState({year: newYear});
+            }).bind(this), 700);
+        }
+        else {
+            clearInterval(this.interval);
+            this.interval = -1;
+        }
+    }
+    
+    
     componentDidMount() {
         this.getAPI('fipsData1', this.state.fips1);
         this.getAPI('fipsData2', this.state.fips2);
         
-        setInterval( (state => {
-            const newYear = this.state.year>=settings.maxYear ? settings.minYear : this.state.year+1;
-            this.setState({year: newYear});
-        }).bind(this), 700);
     }
     
     getAPI(fipsKey, country) {

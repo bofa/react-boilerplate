@@ -19,14 +19,22 @@ module.exports = {
   module: {
     loaders: [{
             test: /\.jsx?$/,
-            loaders: ['react-hot', 'babel'],
+            loaders: ['react-hot', 'babel-loader'],
             include: path.join(__dirname, 'src')
         },
         { 
             test: /\.css$/, 
             loader: 'css-loader' 
-        
         },
     ]
-  }
+  },
+  resolve: {
+        modulesDirectories: [
+            'node_modules',
+        ],
+        root: [
+            './src',
+        ],
+        extensions: ['', '.js', '.jsx']
+    },
 };

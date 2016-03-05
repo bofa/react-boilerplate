@@ -46,8 +46,6 @@ export default class Main extends Component {
             interval: -1
         };
         
-        // console.log("SelectField", SelectField, "MenuItem", MenuItem);
-        
     }
     
     fips1(event, index, value) {
@@ -65,8 +63,6 @@ export default class Main extends Component {
     }
     
     render() {
-
-        console.log("State", this.state);
         
         const max = Math.max(this.state.fipsData1.get('maxYear'), this.state.fipsData2.get('maxYear'));
         
@@ -98,8 +94,6 @@ export default class Main extends Component {
     }
     
     onAnimate() {
-       
-        console.log("On animate", this.state.interval);
         
         if(this.state.interval===-1) {
             clearInterval(this.interval);
@@ -128,20 +122,17 @@ export default class Main extends Component {
     
     getAPI(fipsKey, country) {
         
-        console.log("Yooo", fipsKey, country);
-        
         //let { country } = this.props;
         let years = [...rangeGen(settings.minYear, settings.maxYear, 1)];
         
         // TODO max for max POP
         this.setState({[fipsKey]: Map()});
-        const p = API.getCountry(country, years);
-        p.then( v => {
-            v.name = name;
-            console.log("v", v);
+        const p = API.getCountry(country, years)
+        .then( v => {
+            const fips = FIPS.find( element => element.FIPS === country );
+            v.name = fips ? fips.name : "";
             
             v.maxYear = Object.keys(v).reduce(function (previous, key) {
-                console.log("v[key].POP", v[key].POP, key);
                 const value = parseInt(v[key].POP);
                 if( value && !isNaN(value) ) {
                     return Math.max(previous, value );

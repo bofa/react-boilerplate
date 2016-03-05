@@ -9,8 +9,6 @@ injectTapEventPlugin();
 var css = require('flexboxgrid/css/flexboxgrid.min.css');
 require('es6-promise').polyfill();
 
-console.log("css", css);
-
 export default class App extends Component {
     
     constructor() {

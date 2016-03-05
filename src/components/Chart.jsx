@@ -53,7 +53,7 @@ export default class Chart extends Component {
                 type: 'bar'
             },
             title: {
-                text: 'Population pyramid for ' + this.state.name + ', ' + year
+                text: 'Population pyramid for ' + country.get('name') + ', ' + year
             },
             subtitle: {
                 text: 'Source: <a href="http://www.census.gov/">US Census</a>'

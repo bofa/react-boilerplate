@@ -23,8 +23,6 @@ export default class Slider extends Component {
         const { min, max, onChange } = this.props;
         let year = min + (max-min)*value;
         
-        console.log("On change", min, max, value, year);
-        
         onChange(Math.round(year));
     }
     

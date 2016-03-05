@@ -39,10 +39,6 @@ export default class API {
         let localStorage = LS.get(country);
         localStorage = localStorage ? JSON.parse(localStorage) : {};
         
-       
-        console.log("Running API", country, years);
-        // Make a request for a user with a given ID
-        
         
         let promises = [];
         for(let year of years) {
@@ -51,11 +47,9 @@ export default class API {
                         ageString + "&FIPS=" + country + "&time=" + year;
 
             if( year in localStorage  ) {
-                console.log("Running Local", "c:", country, "year:", year, "l", localStorage[year]);
                 promises.push(Promise.resolve( {[year]: localStorage[year] } ));
             }
             else {
-                console.log("Running API", "c:", country, "year:", year);
                 promises.push(axios.get(url)
                 .then(function (response) {
                     let out = {};
@@ -63,17 +57,14 @@ export default class API {
                     return out;
                 })
                 .catch(function (response) {
-                    console.log(response);
+                    console.log("Failed: ", response);
                     return undefined;
                 }));
             }
             
         }
         
-        console.log("Promises", promises);
-        
         let pOut = Promise.all(promises).then(values => { 
-            console.log(values);
             return values.reduce( (a,b) => Object.assign(a,b) );
         }, f => console.log("API fail", f) );
         

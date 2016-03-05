@@ -57,7 +57,6 @@ export default class API {
                     return out;
                 })
                 .catch(function (response) {
-                    console.log("Failed: ", response);
                     return undefined;
                 }));
             }

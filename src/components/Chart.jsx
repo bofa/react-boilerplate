@@ -27,13 +27,6 @@ export default class Chart extends Component {
         
         const { country, year, scale } = this.props;
         
-        // data = country.toJS();
-        
-        // const year = 2011;
-        
-        
-        //const demogrpyData = country.get() data[this.state.contry];
-        
         if(!country) {
             return false;
         }
@@ -91,14 +84,12 @@ export default class Chart extends Component {
                     stacking: 'normal'
                 }
             },
-
             tooltip: {
                 formatter: function () {
                     return '<b>' + country.get('name') + ', age ' + this.point.category + '</b><br/>' +
                         'Population: ' + Highcharts.numberFormat(Math.abs(this.point.y), 0);
                 }
             },
-
             series: [{
                 name: 'Male',
                 data: menData,
@@ -109,7 +100,6 @@ export default class Chart extends Component {
                 animation: false,
             }]
         }
-        
         
         return (
             <div>

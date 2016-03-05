@@ -70,7 +70,7 @@ export default class Main extends Component {
             <div>
             
                 <div>
-                    <Slider year={this.state.year} min={settings.minYear} max={settings.maxYear} onChange={this.onSliderChange} onAnimate={ this.onAnimate } />
+                    <Slider animate={this.state.interval===-1} year={this.state.year} min={settings.minYear} max={settings.maxYear} onChange={this.onSliderChange} onAnimate={ this.onAnimate } />
                 </div>
                 
                 <div className="row">
@@ -96,16 +96,22 @@ export default class Main extends Component {
     onAnimate() {
         
         if(this.state.interval===-1) {
-            clearInterval(this.interval);
-            this.state.interval = setInterval( (state => {
-                const newYear = this.state.year>=settings.maxYear ? settings.minYear : this.state.year+1;
-                this.setState({year: newYear});
-            }).bind(this), 500);
+            // Fire imidiatly
+            const newYear = this.state.year>=settings.maxYear ? settings.minYear : this.state.year+1;
+            this.setState({year: newYear});
+            
+            this.setState({interval: 
+                window.setInterval( (state => {
+                    const newYear = this.state.year>=settings.maxYear ? settings.minYear : this.state.year+1;
+                    this.setState({year: newYear});
+                }).bind(this), 500) 
+            });
         }
         else {
-            clearInterval(this.interval);
-            this.state.interval = -1;
+            window.clearInterval(this.state.interval);
+            this.setState({interval: -1});
         }
+        
     }
     
     

@@ -1,3 +1,5 @@
+// https://en.wikipedia.org/wiki/List_of_FIPS_country_codes
+
 function compare(a,b) {
     if (a.name < b.name)
         return -1;

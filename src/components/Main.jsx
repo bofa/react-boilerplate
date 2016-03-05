@@ -44,7 +44,8 @@ export default class Main extends Component {
             fips1: 'KR',
             fips2: 'WS',
             fipsData1: Map(),
-            fipsData2: Map()
+            fipsData2: Map(),
+            interval: -1
         };
         
         // console.log("SelectField", SelectField, "MenuItem", MenuItem);
@@ -98,18 +99,20 @@ export default class Main extends Component {
         );
     }
     
-    onAnimate(start) {
+    onAnimate() {
+       
+        console.log("On animate", this.state.interval);
         
-        if(this.interval!==-1) {
+        if(this.state.interval===-1) {
             clearInterval(this.interval);
-            this.interval = setInterval( (state => {
+            this.state.interval = setInterval( (state => {
                 const newYear = this.state.year>=settings.maxYear ? settings.minYear : this.state.year+1;
                 this.setState({year: newYear});
             }).bind(this), 500);
         }
         else {
             clearInterval(this.interval);
-            this.interval = -1;
+            this.state.interval = -1;
         }
     }
     
@@ -117,6 +120,11 @@ export default class Main extends Component {
     componentDidMount() {
         this.getAPI('fipsData1', this.state.fips1);
         this.getAPI('fipsData2', this.state.fips2);
+    
+        document.addEventListener("visibilitychange", function() {
+            clearInterval(this.state.interval);
+            this.state.interval = -1;
+        }.bind(this));
         
     }
     

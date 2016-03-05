@@ -11,6 +11,12 @@ export default class Chart extends Component {
     
     constructor() {
         super();
+        
+        const ageArray = this.generateAgeArray();
+        
+        this.menArray = ageArray.filter(e => e.charAt(0)==='M');
+        this.womanArray = ageArray.filter(e => e.charAt(0)==='F');
+                
         this.state = {
         
         };
@@ -24,13 +30,10 @@ export default class Chart extends Component {
         
         const { country, year, scale } = this.props;
         
-        const data = country.toJS();
+        // data = country.toJS();
         
         // const year = 2011;
         
-        const ageArray = this.generateAgeArray();
-        const menArray = ageArray.filter(e => e.charAt(0)==='M');
-        const womanArray = ageArray.filter(e => e.charAt(0)==='F');
         
         //const demogrpyData = country.get() data[this.state.contry];
         
@@ -38,8 +41,8 @@ export default class Chart extends Component {
             return false;
         }
         
-        const menData = menArray.map(e => -parseInt(country.getIn([''+year, e])));
-        const womanData = womanArray.map(e => parseInt(country.getIn([''+year, e])));
+        const menData = this.menArray.map(e => -parseInt(country.getIn([''+year, e])));
+        const womanData = this.womanArray.map(e => parseInt(country.getIn([''+year, e])));        
         
         // Age categories
         const categories = ['0-4', '5-9', '10-14', '15-19',

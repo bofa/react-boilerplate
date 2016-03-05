@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 import Immutable, { Map } from 'immutable';
-import axios from 'axios';
 
 global.Highcharts = require('highcharts');
-//var HighchartsMore = require('highcharts-more');
-//HighchartsMore(global.Highcharts);
 var ReactHighcharts = require('react-highcharts');
 
 export default class Chart extends Component {

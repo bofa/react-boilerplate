@@ -5,8 +5,6 @@ import SelectField from 'material-ui/lib/select-field';
 import MenuItem from 'material-ui/lib/menus/menu-item';
 import DropDownMenu from 'material-ui/lib/DropDownMenu';
 
-const {Grid, Row, Col} = require('react-flexbox-grid');
-
 import Chart from './Chart';
 import Slider from './Slider';
 

@@ -2,9 +2,6 @@ import React, { Component } from 'react';
 import MaterialSlider from 'material-ui/lib/slider';
 import TextField from 'material-ui/lib/text-field';
 
-import FloatingActionButton from 'material-ui/lib/floating-action-button';
-import ContentAdd from 'material-ui/lib/svg-icons/content/add';
-
 import IconButton from 'material-ui/lib/icon-button';
 
 export default class Slider extends Component {

@@ -1,7 +1,5 @@
-demography-portal
+Boilerplate
 =====================
-
-See the [hosted](http://bofa.github.io/demography-portal) results. 
 
 ### Usage
 
@@ -25,4 +23,3 @@ open http://localhost:3000
 * [react-hot-loader on Github](https://github.com/gaearon/react-hot-loader)
 * [Integrating JSX live reload into your workflow](http://gaearon.github.io/react-hot-loader/getstarted/)
 * [Troubleshooting guide](https://github.com/gaearon/react-hot-loader/blob/master/docs/Troubleshooting.md)
-* Ping dan_abramov on Twitter or #reactjs IRC

@@ -13,11 +13,9 @@ export default class Main extends Component {
     
     render() {
         
-        const max = Math.max(this.state.fipsData1.get('maxYear'), this.state.fipsData2.get('maxYear'));
-        
         return (
             <div>
-            
+                Hello world!
             </div>
         );
 

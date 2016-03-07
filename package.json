@@ -33,19 +33,11 @@
     "webpack-dev-server": "^1.12.1"
   },
   "dependencies": {
-    "axios": "^0.9.1",
-    "es6-promise": "^3.1.2",
     "flexboxgrid": "^6.3.0",
-    "highcharts": "^4.2.3",
-    "highcharts-more": "^0.1.2",
-    "immutable": "^3.7.6",
     "install": "^0.5.4",
-    "local-storage": "^1.4.2",
     "material-ui": "^0.14.4",
-    "npm": "^3.7.5",
     "react": "^0.14.7",
     "react-dom": "^0.14.0",
-    "react-highcharts": "^7.0.0",
     "react-tap-event-plugin": "^0.2.2"
   }
 }
